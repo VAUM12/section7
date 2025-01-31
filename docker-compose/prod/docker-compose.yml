@@ -1,6 +1,6 @@
 services:
   rabbit:
-    image: rabbitmq:3.13-management
+    image: rabbitmq:4.0-management
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -15,8 +15,38 @@ services:
       file: common-config.yml
       service: network-deploy-service
 
+  accountsdb:
+    container_name: accountsdb
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: accountsdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  loansdb:
+    container_name: loansdb
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: loansdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
+  cardsdb:
+    container_name: cardsdb
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: cardsdb
+    extends:
+      file: common-config.yml
+      service: microservice-db-config
+
   configserver:
-    image: "eazybytes/configserver:s6"
+    image: "meets12/configserver:s6"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -34,7 +64,7 @@ services:
       service: microservice-base-config
 
   accounts:
-    image: "eazybytes/accounts:s6"
+    image: "meets12/accounts:s7"
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -48,7 +78,7 @@ services:
       service: microservice-configserver-config
 
   loans:
-    image: "eazybytes/loans:s6"
+    image: "meets12/loans:s7"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -62,7 +92,7 @@ services:
       service: microservice-configserver-config
 
   cards:
-    image: "eazybytes/cards:s6"
+    image: "meets12/cards:s7"
     container_name: cards-ms
     ports:
       - "9000:9000"
